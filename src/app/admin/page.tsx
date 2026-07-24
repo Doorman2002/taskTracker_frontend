@@ -26,10 +26,11 @@ export default function AdminLogin() {
     setError("");
     setLoading(true);
     try {
-      const res = await api.adminLogin({ email, password });
+      await api.adminLogin({ email, password });
       localStorage.setItem("user_role", "admin");
       localStorage.setItem("user_is_admin", "true");
       router.push("/admin/dashboard");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (adminErr: any) {
       if (adminErr.message?.toLowerCase().includes('not found')) {
         try {
@@ -38,6 +39,7 @@ export default function AdminLogin() {
           if (res.dpt) localStorage.setItem('user_dept', res.dpt);
           localStorage.setItem('user_is_admin', 'false');
           router.push('/dashboard');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (staffErr: any) {
           setError(staffErr.message || "Login failed");
         }

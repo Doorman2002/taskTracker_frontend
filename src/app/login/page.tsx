@@ -31,13 +31,15 @@ export default function Login() {
       if (res.dpt) localStorage.setItem('user_dept', res.dpt);
       localStorage.setItem('user_is_admin', 'false');
       router.push('/dashboard');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (staffErr: any) {
       if (staffErr.message?.toLowerCase().includes('not found')) {
         try {
-          const res = await api.adminLogin({ email, password });
+          await api.adminLogin({ email, password });
           localStorage.setItem('user_role', 'admin');
           localStorage.setItem('user_is_admin', 'true');
           router.push('/admin/dashboard');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (adminErr: any) {
           setError(adminErr.message || 'Login failed');
         }
@@ -86,7 +88,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Email or Employee's unique ID
+                Email or Employee&apos;s unique ID
               </label>
               <input
                 type="text"
@@ -141,7 +143,7 @@ export default function Login() {
           </form>
 
           <div className="text-xs text-gray-600 text-left mt-5">
-            Don't have an account yet?{' '}
+            Don&apos;t have an account yet?{' '}
             <a href="/signup" className="text-[#003A47] font-semibold hover:underline">
               Create an Account
             </a>

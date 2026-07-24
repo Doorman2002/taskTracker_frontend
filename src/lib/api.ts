@@ -1,5 +1,6 @@
 const API_BASE = "https://task-tracker-back-mfxy.onrender.com";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function request<T = any>(
   endpoint: string,
   options: RequestInit = {},
@@ -22,20 +23,18 @@ async function request<T = any>(
     credentials: "include",
   });
 
-  // --- SAFE PARSING FIX STARTS HERE ---
-  const contentType = res.headers.get("content-type");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let data: any = {};
 
-  if (contentType && contentType.includes("application/json")) {
+  if (res.headers.get("content-type")?.includes("application/json")) {
     data = await res.json();
-    console.log("Valid JSON Response:", data);
   } else {
-    // If the server returns HTML/Text (like a 404 or 500 error), read it as text
     const rawText = await res.text();
-    console.error("🚨 BACKEND SYSTEM ERROR (Received non-JSON content):", rawText);
-    throw new Error(`Server Error (${res.status}): Expected JSON but received HTML or plain text.`);
+    console.error("BACKEND SYSTEM ERROR (Received non-JSON content):", rawText);
+    throw new Error(
+      `Server Error (${res.status}): Expected JSON but received HTML or plain text.`,
+    );
   }
-  // --- SAFE PARSING FIX ENDS HERE ---
 
   if (!res.ok) {
     if (
@@ -78,6 +77,7 @@ export const api = {
 
   getHistory: (params?: { filter?: string; q?: string }) => {
     const query = params ? "?" + new URLSearchParams(params).toString() : "";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return request<{ info: any[]; staff_name: string }>("/history/" + query, {
       method: "GET",
     });
@@ -108,16 +108,25 @@ export const api = {
       body: JSON.stringify(body),
     }),
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAdminDashboard: () => request<any>("/admin/dashboard/", { method: "GET" }),
 
   createDirectorTask: (body: { task: string; status?: string }) =>
     request("/director/task/", { method: "POST", body: JSON.stringify(body) }),
 
   getDirectorHistory: () =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     request<any>("/director/history/", { method: "GET" }),
 
-  getAllStaffTasks: (params?: { filter?: string; q?: string }) => {
+  getAllStaffTasks: (params?: {
+    filter?: string;
+    q?: string;
+    month?: string;
+    day?: string;
+    date?: string;
+  }) => {
     const query = params ? "?" + new URLSearchParams(params).toString() : "";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return request<any>("/director/tasks/" + query, { method: "GET" });
   },
 

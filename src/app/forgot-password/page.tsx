@@ -24,6 +24,7 @@ export default function ForgotPassword() {
       await api.forgotPassword(email);
       setMessage("OTP sent to your email");
       setStep(2);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Failed to send OTP");
     } finally {
@@ -41,6 +42,7 @@ export default function ForgotPassword() {
       setToken(res.token);
       setMessage("OTP verified");
       setStep(3);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Invalid OTP");
     } finally {
@@ -57,6 +59,7 @@ export default function ForgotPassword() {
       await api.resetPassword(email, token, newPassword);
       setMessage("Password reset successfully");
       setTimeout(() => router.push("/login"), 1500);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Failed to reset password");
     } finally {

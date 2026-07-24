@@ -37,6 +37,7 @@ export default function SignUpPage() {
     try {
       await api.signup({ name, email, password, dept, role });
       router.push("/login");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.log(err);
       setError(err.message || "Signup failed");

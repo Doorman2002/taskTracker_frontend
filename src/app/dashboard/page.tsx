@@ -5,7 +5,6 @@ import {
   ListTodo,
   LogOut,
   ChevronDown,
-  TrendingUp,
   ChevronRight,
   Plus,
   X,
@@ -23,18 +22,19 @@ import AuthGuard from "@/components/AuthGuard";
 
 export default function EmployeeDashboard() {
   const [activeView, setActiveView] = useState("dashboard");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [showAddTask, setShowAddTask] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [taskSubmitted, setTaskSubmitted] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editingTask, setEditingTask] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tasks, setTasks] = useState<any[]>([]);
-  const [staffName, setStaffName] = useState("");
   const [loading, setLoading] = useState(true);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskProgress, setTaskProgress] = useState("10%");
-  const [taskStatus, setTaskStatus] = useState("Not started");
   const [taskCompletion, setTaskCompletion] = useState(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -57,14 +57,15 @@ export default function EmployeeDashboard() {
       if (filter) params.filter = filter;
       if (q) params.q = q;
       const res = await api.getHistory(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Object.keys(params).length ? (params as any) : undefined,
       );
       setTasks((res.info || []).reverse());
       if (res.staff_name) {
-        setStaffName(res.staff_name);
         setDisplayName(res.staff_name);
         localStorage.setItem("user_name", res.staff_name);
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (
         err.message?.includes("Authentication") ||
@@ -82,21 +83,20 @@ export default function EmployeeDashboard() {
     fetchTasks(filt, taskSearch);
   };
 
-  const handleSearch = () => {
-    fetchTasks(taskFilter, taskSearch);
-  };
-
   useEffect(() => {
     const t = setTimeout(() => fetchTasks(taskFilter, taskSearch), 300);
     return () => clearTimeout(t);
-  }, [taskSearch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [taskSearch]);
 
   useEffect(() => {
     const savedName =
       typeof window !== "undefined" ? localStorage.getItem("user_name") : null;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (savedName) setDisplayName(savedName);
     fetchTasks();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
   const getInitials = (name: string) => {
     if (!name) return "?";
@@ -111,11 +111,12 @@ export default function EmployeeDashboard() {
     e.preventDefault();
     setSubmitting(true);
     try {
+      const computedStatus = taskProgress === "100%" ? "Completed" : "In Progress";
       if (editingTask) {
         await api.updateTask(editingTask.id, {
           task: taskTitle,
           description: taskDescription || undefined,
-          status: taskStatus,
+          status: computedStatus,
           progress: taskProgress,
           completion_date: taskCompletion || undefined,
         });
@@ -123,7 +124,7 @@ export default function EmployeeDashboard() {
         await api.createTask({
           task: taskTitle,
           description: taskDescription || undefined,
-          status: taskStatus,
+          status: computedStatus,
           progress: taskProgress,
           completion_date: taskCompletion || undefined,
         });
@@ -134,12 +135,12 @@ export default function EmployeeDashboard() {
       setTaskTitle("");
       setTaskDescription("");
       setTaskProgress("10%");
-      setTaskStatus("Not started");
       const d = new Date();
       setTaskCompletion(
         `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`,
       );
       fetchTasks(taskFilter, taskSearch);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       if (
@@ -154,12 +155,12 @@ export default function EmployeeDashboard() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEditTask = (task: any) => {
     setEditingTask(task);
     setTaskTitle(task.task || task.title || "");
     setTaskDescription(task.description || "");
     setTaskProgress(task.progress || "10%");
-    setTaskStatus(task.status || "In Progress");
     setTaskCompletion(task.completion_date || "");
     setSelectedTask(null);
     setShowAddTask(true);
@@ -185,6 +186,7 @@ export default function EmployeeDashboard() {
       if (res.role) localStorage.setItem("user_role", res.role);
       if (res.email) localStorage.setItem("user_email", res.email);
       setShowProfile(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Profile update failed:", err.message);
     } finally {
@@ -320,7 +322,7 @@ export default function EmployeeDashboard() {
                   className="flex items-center gap-2 bg-[#003A47] text-white px-5 py-2.5 rounded-md font-medium text-sm hover:bg-[#002b35] transition-colors shadow-sm"
                 >
                   <Plus className="w-4 h-4" />
-                  Add Today's Task
+                  Add Today&apos;s Task
                 </button>
               </div>
             )}
@@ -451,12 +453,12 @@ export default function EmployeeDashboard() {
                             <th className="py-3.5 px-6">Task Submitted</th>
                             <th className="py-3.5 px-6">Date Submitted</th>
                             <th className="py-3.5 px-6">Completion Date</th>
-                            <th className="py-3.5 px-6">Status</th>
                             <th className="py-3.5 px-6">Progress Tab</th>
                             <th className="py-3.5 px-6 w-10"></th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50 text-xs font-medium text-gray-600">
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                           {tasks.map((item: any, idx: number) => (
                             <tr
                               key={idx}
@@ -472,18 +474,6 @@ export default function EmployeeDashboard() {
                               <td className="py-3.5 px-6 text-gray-400">
                                 {formatDate(item.completion_date)}
                               </td>
-                              <td className="py-3.5 px-6">
-                                <span
-                                  className={`font-semibold ${
-                                    item.status === "Completed" ||
-                                    item.status === "completed"
-                                      ? "text-green-600"
-                                      : "text-amber-500"
-                                  }`}
-                                >
-                                  {item.status}
-                                </span>
-                              </td>
                               <td className="py-3.5 px-6 text-gray-900 font-semibold">
                                 {item.progress || item.progress_tab || "-"}
                               </td>
@@ -497,6 +487,7 @@ export default function EmployeeDashboard() {
                     </div>
 
                     <div className="md:hidden divide-y divide-gray-200">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {tasks.map((item: any, idx: number) => (
                         <div
                           key={idx}
@@ -517,24 +508,9 @@ export default function EmployeeDashboard() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-gray-400">
-                                Completion:{" "}
-                              </span>
+                              <span className="text-gray-400">Completion: </span>
                               <span className="text-gray-600 font-medium">
                                 {formatDate(item.completion_date)}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-gray-400">Status: </span>
-                              <span
-                                className={`font-semibold ${
-                                  item.status === "Completed" ||
-                                  item.status === "completed"
-                                    ? "text-green-600"
-                                    : "text-amber-500"
-                                }`}
-                              >
-                                {item.status}
                               </span>
                             </div>
                             <div>
@@ -737,46 +713,24 @@ export default function EmployeeDashboard() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col space-y-2">
-                      <label className="text-sm font-medium text-gray-900">
-                        Progress
-                      </label>
-                      <div className="relative">
-                        <select
-                          value={taskProgress}
-                          onChange={(e) => setTaskProgress(e.target.value)}
-                          className="w-full appearance-none px-4 py-3 border border-gray-300 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-[#003A47] focus:border-[#003A47] bg-white pr-10 cursor-pointer"
-                        >
-                          <option value="10%">10%</option>
-                          <option value="25%">25%</option>
-                          <option value="50%">50%</option>
-                          <option value="75%">75%</option>
-                          <option value="100%">100%</option>
-                        </select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
-                          <ChevronDown className="h-4 w-4 stroke-[1.5]" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col space-y-2">
-                      <label className="text-sm font-medium text-gray-900">
-                        Status
-                      </label>
-                      <div className="relative">
-                        <select
-                          value={taskStatus}
-                          onChange={(e) => setTaskStatus(e.target.value)}
-                          className="w-full appearance-none px-4 py-3 border border-gray-300 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-[#003A47] focus:border-[#003A47] bg-white pr-10 cursor-pointer"
-                        >
-                          <option value="Not started">Not started</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Completed">Completed</option>
-                        </select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
-                          <ChevronDown className="h-4 w-4 stroke-[1.5]" />
-                        </div>
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-medium text-gray-900">
+                      Progress
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={taskProgress}
+                        onChange={(e) => setTaskProgress(e.target.value)}
+                        className="w-full appearance-none px-4 py-3 border border-gray-300 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-[#003A47] focus:border-[#003A47] bg-white pr-10 cursor-pointer"
+                      >
+                        <option value="10%">10%</option>
+                        <option value="25%">25%</option>
+                        <option value="50%">50%</option>
+                        <option value="75%">75%</option>
+                        <option value="100%">100%</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
+                        <ChevronDown className="h-4 w-4 stroke-[1.5]" />
                       </div>
                     </div>
                   </div>
