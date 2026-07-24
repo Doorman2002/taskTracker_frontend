@@ -575,7 +575,7 @@ export default function EmployeeDashboard() {
                     Task description
                   </h3>
                   <div className="w-full min-h-[90px] border border-gray-200 rounded-xl p-4 text-sm text-gray-800 bg-white leading-relaxed">
-                    {selectedTask.description || `Create a ${selectedTask.task || selectedTask.title} for the task tracker project.`}
+                    {selectedTask.description || "No description provided"}
                   </div>
                 </div>
 

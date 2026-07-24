@@ -285,7 +285,7 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 max-sm:hidden">
+            <div className="flex items-center gap-4">
               <div className="flex items-center gap-2.5 pl-2">
                 <div className="w-9 h-9 rounded-full bg-[#003A47] flex items-center justify-center text-xs font-bold text-white uppercase">
                   {getInitials(displayName)}
@@ -771,7 +771,7 @@ export default function AdminDashboard() {
                     Task description
                   </h3>
                   <div className="w-full min-h-[90px] border border-gray-200 rounded-xl p-4 text-sm text-gray-800 bg-white leading-relaxed">
-                    {selectedTask.description || `Create a ${selectedTask.task || selectedTask.title} for the task tracker project.`}
+                    {selectedTask.description || "No description provided"}
                   </div>
                 </div>
 
