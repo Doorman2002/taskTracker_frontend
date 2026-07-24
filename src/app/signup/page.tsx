@@ -159,7 +159,10 @@ export default function SignUpPage() {
                   >
                     <option value="DPHUB">Digital Productivity Hub</option>
                     <option value="Business Department">
-                      Business Department
+                      Business Development
+                    </option>
+                    <option value="Corporate Engagement">
+                      Corporate Engagement
                     </option>
                     <option value="Social Ministry">Social Ministry</option>
                     <option value="CECC">CECC</option>
