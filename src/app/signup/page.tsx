@@ -38,7 +38,7 @@ export default function SignUpPage() {
       await api.signup({ name, email, password, dept, role });
       router.push("/login");
     } catch (err: any) {
-      console.log(err)
+      console.log(err)endpo
       setError(err.message || "Signup failed");
     } finally {
       setLoading(false);
@@ -161,6 +161,13 @@ export default function SignUpPage() {
                     <option value="LeadPath Consulting">
                       LeadPath Consulting
                     </option>
+
+                    <option value="Business Development">
+                      Business Development
+                    </option>
+
+                    <option value="Social Ministry">Social Ministry</option>
+                    <option value="CECC">CECC</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
                     <ChevronDown className="h-4 w-4" />

@@ -1,4 +1,4 @@
-const API_BASE = "https://task-tracker-back-mfxy.onrender.com/api";
+const API_BASE = "https://task-tracker-back-mfxy.onrender.com";
 
 async function request<T = any>(
   endpoint: string,
@@ -16,7 +16,7 @@ async function request<T = any>(
     headers["Authorization"] = token;
   }
 
-  const res = await fetch(`${API_BASE}${endpoint}`, {
+  const res = await fetch(`${API_BASE}/api/${endpoint}`, {
     ...options,
     headers,
     credentials: "include",
